@@ -1,7 +1,6 @@
 # Automatic Sentiment Analyzer
 
 ![Project Status](https://img.shields.io/badge/status-active-brightgreen.svg)
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 
 Automatic Sentiment Analyzer is designed to implement and evaluate linear classifiers for sentiment analysis. This project focuses on the Perceptron algorithm and its variations, utilizing loss the hinge-loss function. It includes a feature matrix where rows are feature vectors, and columns are individual features, along with a vector of labels representing the actual sentiment of the corresponding features.
