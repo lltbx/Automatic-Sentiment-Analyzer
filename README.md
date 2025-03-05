@@ -4,16 +4,14 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Python](https://img.shields.io/badge/python-3.8%2B-blue.svg)
 
-Automatic Sentiment Analyzer is designed to implement and evaluate linear classifiers for sentiment analysis. This project focuses on the Perceptron algorithm and its variations, utilizing loss functions such as the hinge-loss function. It includes a feature matrix where rows are feature vectors, and columns are individual features, along with a vector of labels representing the actual sentiment of the corresponding features.
+Automatic Sentiment Analyzer is designed to implement and evaluate linear classifiers for sentiment analysis. This project focuses on the Perceptron algorithm and its variations, utilizing loss the hinge-loss function. It includes a feature matrix where rows are feature vectors, and columns are individual features, along with a vector of labels representing the actual sentiment of the corresponding features.
 
 ## Features
-
 - **Linear Classifiers**: Implementations of Perceptron, average Perceptron, and Pegasos algorithms.
-- **Loss Functions**: Includes hinge-loss and other loss functions.
+- **Loss Functions**: Includes hinge-loss and it's variations.
 - **Feature Extraction**: Uses bag-of-words model for feature extraction.
 - **Hyperparameter Tuning**: Capabilities for tuning hyperparameters to optimize model performance.
 - **Accuracy Evaluation**: Mechanisms to evaluate training, validation, and test accuracy.
-
 
 ### Prerequisites
 - Python 3.8 or higher
