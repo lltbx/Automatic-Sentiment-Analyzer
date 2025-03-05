@@ -3,7 +3,7 @@ import utils
 import numpy as np
 
 #-------------------------------------------------------------------------------
-# Data loading. There is no need to edit code in this section.
+# Data loading
 #-------------------------------------------------------------------------------
 
 train_data = utils.load_data('reviews_train.tsv')
@@ -118,26 +118,19 @@ toy_features, toy_labels = toy_data = utils.load_toy_data('toy_data.tsv')
 # print("Most Explanatory Word Features")
 # print(sorted_word_features[:10])
 
-# Create a dictionary without stop words
 dictionary_no_stopwords = p1.bag_of_words(train_texts, remove_stopword=True)
 
 # Rebuild feature matrices using counts (not binary) and without stop words
 train_bow_features_counts = p1.extract_bow_feature_vectors(train_texts, dictionary_no_stopwords, binarize=False)
 test_bow_features_counts = p1.extract_bow_feature_vectors(test_texts, dictionary_no_stopwords, binarize=False)
 
-# Ensure test_labels is a 1D array
 if not hasattr(test_labels, 'shape') or test_labels.shape == ():
     test_labels = np.array([test_labels])  # Convert scalar to 1D array if necessary
 else:
     test_labels = test_labels.reshape(-1)  # Ensure 1D shape
 
-# Train Pegasos on the training data with counts features, T=25, and L=0.01
 theta_counts, theta_0_counts = p1.pegasos(train_bow_features_counts, train_labels, T=25, L=0.01)
 print("Learned theta vector (counts features):", theta_counts)
-
-# Make predictions on the test set with counts features
 test_predictions_counts = p1.classify(test_bow_features_counts, theta_counts, theta_0_counts)
-
-# Compute accuracy on the test set with counts features
 test_accuracy_counts = p1.accuracy(test_predictions_counts, test_labels)
 print(f"Test accuracy with stop words removed and counts features: {test_accuracy_counts:.4f}")

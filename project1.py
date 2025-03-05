@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 #==============================================================================
-#===  PART I  =================================================================
+#===  Algorithms  =================================================================
 #==============================================================================
 def load_stopwords(filename='stopwords.txt'):
     """
@@ -156,19 +156,16 @@ def pegasos_single_step_update(
     """
     prediction = np.dot(theta, feature_vector)
     
-    # Check if the point is misclassified or within the margin (y * (theta · x + theta_0) ≤ 1)
     if label * (prediction + theta_0) <= 1:
         # Update theta with L2 regularization and the gradient term
         # θ = (1 - ηλ) θ + η y x
         theta_update = (1 - eta * L) * theta + eta * label * feature_vector
         
-        # Update theta_0 without regularization (no (1 - ηλ) scaling, as specified)
+        # Update theta_0 without regularization (no (1 - ηλ) scaling
         theta_0_update = theta_0 + eta * label
     else:
-        # Only apply L2 regularization to theta (no update from the gradient)
+        # Only apply L2 regularization to theta 
         theta_update = (1 - eta * L) * theta
-        
-        # No update to theta_0 (keep it the same)
         theta_0_update = theta_0
     
     return (theta_update, theta_0_update)
@@ -182,9 +179,6 @@ def pegasos(feature_matrix, labels, T, L):
     through the data set, there is no need to worry about stopping early.  For
     each update, set learning rate = 1/sqrt(t), where t is a counter for the
     number of updates performed so far (between 1 and nT inclusive).
-
-    NOTE: Please use the previously implemented functions when applicable.  Do
-    not copy paste code from previous parts.
 
     Args:
         `feature_matrix` - A numpy matrix describing the given data. Each row
@@ -205,55 +199,29 @@ def pegasos(feature_matrix, labels, T, L):
     """
     n_features = feature_matrix.shape[1]  # Number of features (columns)
     n_samples = feature_matrix.shape[0]   # Number of data points (rows)
-    # Initialize theta and theta_0 to zero, as required
     theta = np.zeros(n_features)
     theta_0 = 0.0
-    
-    # Initialize counter for the number of updates (t starts at 1 for the first update)
     update_counter = 0
     
-    # Run for T iterations
     for t in range(T):
-        # Get shuffled indices for this iteration using get_order
         indices = get_order(feature_matrix.shape[0])
         
-        # Process each data point in the shuffled order
         for i in indices:
-            # Increment the update counter (t) for each data point processed
             update_counter += 1
-            
-            # Calculate the learning rate eta = 1 / sqrt(t) for this update
             eta = 1 / np.sqrt(update_counter)
-            
-            # Get the feature vector and label for this data point
             feature_vector = feature_matrix[i]
             label = labels[i]
-            
-            # Update theta and theta_0 using pegasos_single_step_update
             theta, theta_0 = pegasos_single_step_update(
-                feature_vector, label, L, eta, theta, theta_0
+            feature_vector, label, L, eta, theta, theta_0
             )
     
     return (theta, theta_0)
 
-
-
 #==============================================================================
-#===  PART II  ================================================================
+#===  Classification  ================================================================
 #==============================================================================
-
-
-##  #pragma: coderesponse template
-##  def decision_function(feature_vector, theta, theta_0):
-##      return np.dot(theta, feature_vector) + theta_0
-##  def classify_vector(feature_vector, theta, theta_0):
-##      return 2*np.heaviside(decision_function(feature_vector, theta, theta_0), 0)-1
-##  #pragma: coderesponse end
-
-
 
 def classify(feature_matrix, theta, theta_0):
-
     """
     A classification function that uses given parameters to classify a set of
     data points.
@@ -263,7 +231,6 @@ def classify(feature_matrix, theta, theta_0):
             represents a single data point.
         `theta` - numpy array describing the linear classifier.
         `theta_0` - real valued number representing the offset parameter.
-
     Returns:
         a numpy array of 1s and -1s where the kth element of the array is the
         predicted classification of the kth row of the feature matrix using the
@@ -282,20 +249,11 @@ def classifier_accuracy(classifier, train_feature_matrix, val_feature_matrix, tr
     trained on the train data. The classifier's accuracy on the train and
     validation data is then returned.
     """
-    # Train the classifier using the training data
     theta, theta_0 = classifier(train_feature_matrix, train_labels, **kwargs)
-    
-    # Make predictions on training data
     train_predictions = classify(train_feature_matrix, theta, theta_0)
-    
-    # Make predictions on validation data
     val_predictions = classify(val_feature_matrix, theta, theta_0)
-    
-    # Calculate accuracy for both training and validation sets
     train_acc = accuracy(train_predictions, train_labels)
     val_acc = accuracy(val_predictions, val_labels)
-    
-    # Return tuple of (training accuracy, validation accuracy)
     return (train_acc, val_acc)
 
 
@@ -308,7 +266,6 @@ def extract_words(text):
         a list of lowercased words in the string, where punctuation and digits
         count as their own words.
     """
-   
     for c in punctuation + digits:
         text = text.replace(c, ' ' + c + ' ')
     return text.lower().split()
@@ -326,15 +283,13 @@ def bag_of_words(texts, remove_stopword=True):  # Default to True for stop word 
         a dictionary that maps each word appearing in `texts` to a unique
         integer `index`, excluding stop words if remove_stopword is True.
     """
-    global stopwords  # Use the stopwords set loaded earlier
-    indices_by_word = {}  # Maps word to unique index
+    global stopwords  
+    indices_by_word = {}  
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
-            # Skip if the word is a stop word and remove_stopword is True
             if remove_stopword and word in stopwords:
                 continue
-            # Only add the word to the dictionary if it’s not already there
             if word not in indices_by_word:
                 indices_by_word[word] = len(indices_by_word)
 
@@ -352,7 +307,7 @@ def extract_bow_feature_vectors(reviews, indices_by_word, binarize=True):
         matrix thus has shape (n, m), where n counts reviews and m counts words
         in the dictionary.
     """
-    # Your code here
+    
     feature_matrix = np.zeros([len(reviews), len(indices_by_word)], dtype=np.float64)
     for i, text in enumerate(reviews):
         word_list = extract_words(text)
